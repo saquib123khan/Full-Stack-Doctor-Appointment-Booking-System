@@ -64,12 +64,20 @@ const Appointment = () => {
         // Format the time (e.g., 10:30 AM) for displaying in the slots
         let formattedTime = currentDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         
-  
-        // Add the current time slot to the array with both the date-time object and formatted time string
-        timeSlots.push({
-          dateTime: new Date(currentDate), // The actual date and time
-          time: formattedTime // Formatted time string for display (e.g., 10:30 AM)
-        })
+        let day = currentDate.getDate();
+        let month = currentDate.getMonth() + 1;
+        let year = currentDate.getFullYear();
+        const slotDate = `${day}_${month}_${year}`;
+        const slotTime = formattedTime;
+
+        const isSlotAvailable = docData?.slots_booked?.[slotDate]?.includes(slotTime) ? false : true;
+
+        if (isSlotAvailable) {
+          timeSlots.push({
+            dateTime: new Date(currentDate),
+            time: formattedTime,
+          });
+        }
   
         // Increment the current time by 30 minutes for the next slot
         currentDate.setMinutes(currentDate.getMinutes() + 30)
