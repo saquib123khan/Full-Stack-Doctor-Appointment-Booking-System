@@ -6,6 +6,7 @@ import doctorModel from '../models/doctor.model.js'
 import userModel from '../models/user.model.js'
 import appointmentModel from '../models/appointment.model.js'
 import {v2 as cloudinary} from 'cloudinary'
+import Razorpay from 'razorpay'
 const registerUser = async(req, res, next) => {
 
     try {
@@ -240,6 +241,65 @@ const cancelAppointment = async (req, res, next) => {
   }
 }
 
+
+const razorpayInstance = new Razorpay({
+    key_id: process.env.RAZORPAY_KEY_ID,
+    key_secret: process.env.RAZORPAY_KEY_SECRET
+})
+// console.log('RAZORPAY_KEY_ID:', process.env.RAZORPAY_KEY_ID);
+// console.log('RAZORPAY_KEY_SECRET:', process.env.RAZORPAY_KEY_SECRET);
+
+
+// API to make payment of appointment using razorpay
+const paymentRazorpay = async(req, res, next) => {
+    try {
+
+       const {appointmentId} = req.body
+       const appointmentData = await appointmentModel.findById(appointmentId)
+       
+       if(!appointmentData || appointmentData.cancelled){
+        return next(new AppError('Appointment camcelled or not found', 400));
+       }
+
+       // Creating options for razorpay payment
+       const options = {
+        amount: appointmentData.amount * 100,
+        currency: process.env.CURRENCY,
+        receipt:appointmentId
+       } 
+        
+       // Creation of an order
+       const order = await razorpayInstance.orders.create(options);
+
+       res.status(200).json({
+        success:true,
+        order
+       })
+
+
+    } catch (error) {
+        return next(new AppError(error.message, 500));
+    }
+}
+
+const verifyRazorpay = async (req, res, next) => {
+    try {
+
+        const {razorpay_order_id} = req.body
+        const orderInfo = await razorpayInstance.orders.fetch(razorpay_order_id)
+
+        if(orderInfo.status === 'paid'){
+            await appointmentModel.findByIdAndUpdate(orderInfo.receipt, {payment:true})
+            res.status(200).json({success:true, message: 'Payment Successful'})
+        }else{
+            res.status(400).json({success:false, message: 'Payment failed'})
+        }
+        
+    } catch (error) {
+        return next(new AppError(error.message, 500));
+    }
+}
+
 export {
     registerUser,
     loginUser,
@@ -247,5 +307,7 @@ export {
     updateProfile,
     bookAppointment,
     listAppointment,
-    cancelAppointment
+    cancelAppointment,
+    paymentRazorpay,
+    verifyRazorpay
 }

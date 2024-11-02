@@ -1,7 +1,6 @@
+import 'dotenv/config'
 import express from 'express'
 import cors from 'cors'
-import dotenv from 'dotenv';
-dotenv.config();
 import adminRouter from './routes/admin.route.js'
 import errorMiddleware from './middlewares/error.middleware.js'
 import connectionToDB from './config/mongodb.js';

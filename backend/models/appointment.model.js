@@ -38,7 +38,7 @@ const appointmentSchema = new mongoose.Schema({
         default: false
     },
     payment:{
-        type: String,
+        type: Boolean,
         default: false
     },
     isCompleted:{
