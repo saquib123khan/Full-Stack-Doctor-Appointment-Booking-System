@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 
 const AddDoctor = () => {
-  const [docImg, setDocImg] = useState(false);
+  const [docImg, setDocImg] = useState(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -39,10 +39,11 @@ const AddDoctor = () => {
       formData.append("degree", education);
       formData.append("address", JSON.stringify({ line1: address1, line2: address2 }));
       // formData.append("address2", JSON.stringify({  }));
+      console.log({ name, email, password, experience, fees, about, speciality, education, address1, address2 });
 
-      formData.forEach((value, key) => {
-        console.log(`${key}: ${value}`);
-      });
+      // formData.forEach((value, key) => {
+      //   console.log(`${key}: ${value}`);
+      // });
 
       const { data } = await axios.post(
         backendUrl + "/api/admin/add-doctor",

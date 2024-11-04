@@ -76,6 +76,11 @@ const loginUser = async (req, res, next) => {
                 success:true,
                 token
             })
+
+            res.status(200).json({
+                success:true,
+                token
+            })
         }else{
             return next(new AppError('Password does not match', 400));
         }

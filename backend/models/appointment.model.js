@@ -17,20 +17,20 @@ const appointmentSchema = new mongoose.Schema({
         type: String,
         required:true
     },
-    UserData:{
+    userData:{
         type: Object,
-        // required:true
+        required:true
     },
     docData:{
         type: Object,
         required:true
     },
     amount:{
-        type: String,
+        type: Number,
         required:true
     },
     date:{
-        type: String,
+        type: Number,
         required:true
     },
     cancelled:{
@@ -42,7 +42,7 @@ const appointmentSchema = new mongoose.Schema({
         default: false
     },
     isCompleted:{
-        type: String,
+        type: Boolean,
         default: false
     }
 })
