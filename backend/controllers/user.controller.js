@@ -72,17 +72,12 @@ const loginUser = async (req, res, next) => {
 
         if(isMatched){
             const token = jwt.sign({id:user._id}, process.env.JWT_SECRET)
-            res.json({
-                success:true,
-                token
-            })
-
             res.status(200).json({
                 success:true,
                 token
             })
         }else{
-            return next(new AppError('Password does not match', 400));
+            return next(new AppError('Password does not match', 404));
         }
 
 } catch (error) {
