@@ -120,11 +120,52 @@ const appointmentCancel = async (req, res, next) => {
     }
 }
 
+// API to get dashboard data for doctor panel
+const doctorDashboard = async(req, res, next) => {
+    try {
+
+        const {docId} = req.body
+
+        const appointments = await appointmentModel.find({docId})
+
+        let earnings = 0
+
+        appointments.map((item)=>{
+          if(item.isCompleted || item.payment){
+            earnings += item.amount
+          }
+        })
+
+        let patients = []
+
+        appointments.map((item)=>{
+            if(!patients.includes(item.userId))
+                patients.push(item.userId)
+        })        
+     
+        const dashData = {
+            earnings,
+            appointments: appointments.length,
+            patients: patients.length,
+            latestAppointments: appointments.slice().reverse().slice(0, 5)
+        }
+
+        res.status(200).json({
+            success: true,
+            dashData
+        })  
+
+    } catch (error) {
+        return next(new AppError(error.message, 500)); 
+    }
+}
+
 export {
     changeAvailability,
     doctorList,
     loginDoctor,
     appointmentsDoctor,
     appointmentComplete,
-    appointmentCancel
+    appointmentCancel,
+    doctorDashboard
 }
