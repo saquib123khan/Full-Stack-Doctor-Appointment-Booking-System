@@ -9,7 +9,7 @@ const Login = () => {
 
   const [state, setState] = useState('Admin')
 
-  const {setAToken, backendUrl} = useContext(AdminContext)
+  const {aToken, setAToken, backendUrl} = useContext(AdminContext)
   const {dToken, setDToken} = useContext(DoctorContext)
 
   const [LoginData, setLoginData] = useState({
@@ -39,7 +39,7 @@ const Login = () => {
          }
       }else{
         try {
-          const {data} = await axios.post(backendUrl + '/api/doctor/login', {email, password}, {Headers:{dToken}})
+          const {data} = await axios.post(backendUrl + '/api/doctor/login', {email, password}, {headers:{dToken}})
         if(data.success){
           console.log(data.token); 
           localStorage.setItem('dToken', data.token)
