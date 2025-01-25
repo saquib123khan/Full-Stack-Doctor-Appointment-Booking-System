@@ -3,7 +3,7 @@ import { DoctorContext } from "../../context/DoctorContext";
 import { assets } from "../../assets/assets";
 import { AppContext } from "../../context/AppContext";
 
-const DoctorDashBoard = () => {
+const DoctorDashboard = () => {
   const { dToken, dashData, setDashData, getDashData, cancelAppointment, completeAppointment } =
     useContext(DoctorContext);
   const {currency, slotDateFormat} = useContext(AppContext) 
@@ -86,4 +86,4 @@ const DoctorDashBoard = () => {
   );
 };
 
-export default DoctorDashBoard;
+export default DoctorDashboard;
