@@ -11,6 +11,7 @@ import userRouter from './routes/user.route.js';
 // app config
 const app = express()
 const PORT = process.env.PORT || 5000
+connectionToDB ()
 
 // middlewares
 app.use(express.json())
@@ -28,7 +29,6 @@ app.get('/', (req,res)=>{
 
 app.use(errorMiddleware)
 
-app.listen(PORT, async ()=> {
-    await connectionToDB ()
+app.listen(PORT, ()=> {
     console.log(`server is running on port http:localhost:${PORT}`);
 })
