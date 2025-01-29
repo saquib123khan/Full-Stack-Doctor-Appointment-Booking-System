@@ -1,7 +1,4 @@
-
-# Project Title
-
-Prescripto - Doctor Appointment Management System
+# Prescripto - Doctor Appointment Management System
 
 A summary
 
